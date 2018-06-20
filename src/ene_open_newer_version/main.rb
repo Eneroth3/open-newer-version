@@ -17,32 +17,43 @@ module OpenNewerVersion
     v || raise(IOError, "Can't determine SU version for '#{path}'. Is file a model?")
   end
 
+  # Ask user for path to open from.
+  #
+  # @return [String]
+  def self.prompt_source_path
+    UI.openpanel("Open", "", "SketchUp Models|*.skp||")
+  end
+
+  # Ask user for path to save converted model to.
+  #
+  # @param source [String]
+  #
+  # @return [String]
+  def self.prompt_target_path(source)
+    title = "Save As SketchUp #{SU_VERSION} Compatible"
+    directory = File.dirname(source)
+    # Prefixing version with 20 as SketchUp 2014 is the oldest supported
+    # version. If ever supporting versions 8 or older, only prefix for
+    # [20]13 and above.
+    filename = "#{File.basename(source, '.skp')} (SU 20#{SU_VERSION}).skp"
+
+    UI.savepanel(title, directory, filename)
+  end
+
   # Convert model to current SU version and open it.
   #
   # @return [Void]
   def self.open_newer_version
-    source = UI.openpanel("Open", "", "SketchUp Models|*.skp||")
-    return unless source
+    source = prompt_source_path || return
 
     if version(source).to_i <= Sketchup.version.to_i
       Sketchup.open_file(source)
       return
     end
 
-    title = "Save As SketchUp #{SU_VERSION} Compatible"
-    directory = File.dirname(source)
-    # Prefixing version with 20 as SketchUp 2014 is the oldest supported
-    # version. If ever supporting versions older than 2013, only prefix for
-    # 13 and above.
-    filename = "#{File.basename(source, ".skp")} (SU 20#{SU_VERSION}).skp"
-    target = UI.savepanel(title, directory, filename)
-    return unless target
+    target = prompt_target_path(source) || return
 
-    # TODO: Move source of binary file into repo once I've got the hang of how
-    # to set up C++ projects (so far it is just a modified version of an
-    # example inside the SDK directory).
-    # TODO: Call program without command line window flashing.
-    %x( "#{PLUGIN_DIR}/bin/convert_version" "#{source}" "#{target}" #{SU_VERSION} )
+    `"#{PLUGIN_DIR}/bin/convert_version" "#{source}" "#{target}" #{SU_VERSION}`
     Sketchup.open_file(target)
 
     nil

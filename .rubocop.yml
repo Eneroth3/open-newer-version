@@ -1,0 +1,71 @@
+require: rubocop-sketchup
+
+AllCops:
+  DisplayCopNames: true
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+# Short lines are in general good for readability but splitting up one
+# expression into multiple lines can be less readable. Aim for 80 chars but
+# allow 120.
+Metrics/LineLength:
+  Max: 120
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+# Use wrapping empty lines in modules containing methods (the first and last
+# method should have the same spacing to the module as there are between
+# methods).
+#
+# Don't however use wrapping empty lines for a module that merely wraps another
+# module.
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# A module that merely wraps one single direct child module should not be
+# indented. Every other code block must be indented.
+Layout/IndentationWidth:
+  IgnoredPatterns:
+    - '^\s*module'
+
+Style/Documentation:
+  Enabled: false
+
+# Double negation is a handy Ruby idiom to assure a value is a boolean, as there
+# is no to_bool/to_boolean/to_b method. What the cop suggest, !var.nil?, doesn't
+# even cater for boolean false as input.
+Style/DoubleNegation:
+  Enabled: false
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation. Use single quotes only if their semantics
+# are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Conflict too often with Metric/LineLength.
+# https://github.com/bbatsov/rubocop/issues/1332#issuecomment-277503854
+Style/GuardClause:
+  Enabled: false
+
+SketchupDeprecations:
+  Enabled: true
+
+SketchupPerformance:
+  Enabled: true
+
+SketchupRequirements:
+  Enabled: true
+
+SketchupSuggestions:
+  Enabled: true
