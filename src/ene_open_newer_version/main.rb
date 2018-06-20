@@ -1,17 +1,8 @@
 module Eneroth
 module OpenNewerVersion
 
-  # Get the number of the running SU version, e.g. 8 or 2013.
-  #
-  # @return [Integer]
-  # TODO: Don't include the 2000. It isn't included in the version number used
-  # in the files.
-  def self.current_su_version
-    version = Sketchup.version.to_i
-    version += 2000 if version > 8
-
-    version
-  end
+  # Mayor version of the running SketchUp.
+  SU_VERSION = Sketchup.version.to_i
 
   # Get SketchUp version string of a saved file.
   #
@@ -38,9 +29,12 @@ module OpenNewerVersion
       return
     end
 
-    title = "Save As SketchUp #{current_su_version} Compatible"
+    title = "Save As SketchUp #{SU_VERSION} Compatible"
     directory = File.dirname(source)
-    filename = "#{File.basename(source, ".skp")} (SU #{current_su_version}).skp"
+    # Prefixing version with 20 as SketchUp 2014 is the oldest supported
+    # version. If ever supporting versions older than 2013, only prefix for
+    # 13 and above.
+    filename = "#{File.basename(source, ".skp")} (SU 20#{SU_VERSION}).skp"
     target = UI.savepanel(title, directory, filename)
     return unless target
 
@@ -48,7 +42,7 @@ module OpenNewerVersion
     # to set up C++ projects (so far it is just a modified version of an
     # example inside the SDK directory).
     # TODO: Call program without command line window flashing.
-    %x( "#{PLUGIN_DIR}/bin/convert_version" "#{source}" "#{target}" #{current_su_version} )
+    %x( "#{PLUGIN_DIR}/bin/convert_version" "#{source}" "#{target}" #{SU_VERSION} )
     Sketchup.open_file(target)
 
     nil
