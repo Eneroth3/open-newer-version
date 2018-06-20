@@ -4,11 +4,26 @@ module OpenNewerVersion
   # Get the number of the running SU version, e.g. 8 or 2013.
   #
   # @return [Integer]
+  # TODO: Don't include the 2000. It isn't included in the version number used
+  # in the files.
   def self.current_su_version
     version = Sketchup.version.to_i
     version += 2000 if version > 8
 
     version
+  end
+
+  # Get SketchUp version string of a saved file.
+  #
+  # @param path [String]
+  #
+  # @raise [IOError]
+  #
+  # @return [String]
+  def self.version(path)
+    v = File.binread(path, 64).tr("\x00", "")[/{([\d.]+)}/n, 1]
+
+    v || raise(IOError, "Can't determine SU version for '#{path}'. Is file a model?")
   end
 
   # Convert model to current SU version and open it.
@@ -18,7 +33,10 @@ module OpenNewerVersion
     source = UI.openpanel("Open", "", "SketchUp Models|*.skp||")
     return unless source
 
-    # TODO: Open directly if of supported version.
+    if version(source).to_i <= Sketchup.version.to_i
+      Sketchup.open_file(source)
+      return
+    end
 
     title = "Save As SketchUp #{current_su_version} Compatible"
     directory = File.dirname(source)
