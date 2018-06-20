@@ -53,6 +53,7 @@ module OpenNewerVersion
 
     target = prompt_target_path(source) || return
 
+    Sketchup.status_text = "Converting model to supported format..."
     `"#{PLUGIN_DIR}/bin/convert_version" "#{source}" "#{target}" #{SU_VERSION}`
     Sketchup.open_file(target)
 
