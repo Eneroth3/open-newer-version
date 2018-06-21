@@ -18,7 +18,7 @@
 x64/
 x86/
 bld/
-[Bb]in/
+# [Bb]in/ # bin file within extension should not be ignored.
 [Oo]bj/
 [Ll]og/
 
