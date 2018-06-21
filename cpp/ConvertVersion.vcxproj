@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6A28E2DD-F4F2-49EE-9F90-A734583F2BE1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ReadingFromASkpFile</RootNamespace>
-    <ProjectName>ReadingFromAskpFile</ProjectName>
+    <RootNamespace>ConvertVersion</RootNamespace>
+    <ProjectName>ConvertVersion</ProjectName>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
