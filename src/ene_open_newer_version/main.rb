@@ -30,11 +30,11 @@ module OpenNewerVersion
   #
   # @return [String]
   def self.prompt_target_path(source)
-    title = "Save As SketchUp #{SU_VERSION} Compatible"
-    directory = File.dirname(source)
     # Prefixing version with 20 as SketchUp 2014 is the oldest supported
     # version. If ever supporting versions 8 or older, only prefix for
     # [20]13 and above.
+    title = "Save As SketchUp 20#{SU_VERSION} Compatible"
+    directory = File.dirname(source)
     filename = "#{File.basename(source, '.skp')} (SU 20#{SU_VERSION}).skp"
 
     UI.savepanel(title, directory, filename)
