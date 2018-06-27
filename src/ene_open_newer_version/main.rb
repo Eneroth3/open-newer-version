@@ -70,13 +70,13 @@ module OpenNewerVersion
   #
   # @return [Void]
   def self.on_exist(path, async = true, delay = 0.2, &block)
-    if File.exists?(path)
+    if File.exist?(path)
       block.call
       return
     end
 
     if async
-      UI.start_timer(delay) {on_exist(path, async, delay, &block)}
+      UI.start_timer(delay) { on_exist(path, async, delay, &block) }
     else
       sleep(delay)
       on_exist(path, async, delay, &block)
@@ -98,12 +98,10 @@ module OpenNewerVersion
     # makes the call asynchronous, we need to wait to open the converted model
     # until its file exists. To check for file creation, we must first make sure
     # there is no existing file by the same name already.
-    File.delete(target) if File.exists?(target)
+    File.delete(target) if File.exist?(target)
 
-    system_call(%{"#{PLUGIN_DIR}/bin/ConvertVersion" "#{source}" "#{target}" #{SU_VERSION}})
-    on_exist(target, false) {
-      Sketchup.open_file(target)
-    }
+    system_call(%("#{PLUGIN_DIR}/bin/ConvertVersion" "#{source}" "#{target}" #{SU_VERSION}))
+    on_exist(target, false) { Sketchup.open_file(target) }
 
     nil
   end
