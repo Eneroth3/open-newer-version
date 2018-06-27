@@ -1,3 +1,5 @@
+require "tempfile"
+
 module Eneroth
 module OpenNewerVersion
 
@@ -40,22 +42,83 @@ module OpenNewerVersion
     UI.savepanel(title, directory, filename)
   end
 
-  # Convert model to current SU version and open it.
+  # Run system call without flashing command line window on Windows.
+  # Runs asynchronously.
+  # Windows only hack.
+  #
+  # @param cmd String.
+  #
+  # @return [Void].
+  def self.system_call(cmd)
+    # HACK: Run the command through a VBS script to avoid flashing command line
+    # window.
+    file = Tempfile.new(["cmd", ".vbs"])
+    file.write("Set WshShell = CreateObject(\"WScript.Shell\")\n")
+    file.write("WshShell.Run \"#{cmd.gsub('"', '""')}\", 0\n")
+    file.close
+    UI.openURL("file://#{file.path}")
+
+    nil
+  end
+
+  # Run block once a file has been created.
+  #
+  # @param path [String]
+  # @param async [Boolean]
+  # @param delay [Flaot]
+  # @param block [Proc]
+  #
+  # @return [Void]
+  def self.on_exist(path, async = true, delay = 0.2, &block)
+    if File.exists?(path)
+      block.call
+      return
+    end
+
+    if async
+      UI.start_timer(delay) {on_exist(path, async, delay, &block)}
+    else
+      sleep(delay)
+      on_exist(path, async, delay, &block)
+    end
+
+    nil
+  end
+
+  # Convert an external model to the current SU version and open it.
+  #
+  # @param source [String]
+  # @param target [String]
+  #
+  # @return [Void]
+  def self.convert_and_open(source, target)
+    Sketchup.status_text = "Converting model to supported format..."
+
+    # Since the hack for running the system command without a flashing window
+    # makes the call asynchronous, we need to wait to open the converted model
+    # until its file exists. To check for file creation, we must first make sure
+    # there is no existing file by the same name already.
+    File.delete(target) if File.exists?(target)
+
+    system_call(%{"#{PLUGIN_DIR}/bin/ConvertVersion" "#{source}" "#{target}" #{SU_VERSION}})
+    on_exist(target, false) {
+      Sketchup.open_file(target)
+    }
+
+    nil
+  end
+
+  # Ask for path to open, convert if needed and open.
   #
   # @return [Void]
   def self.open_newer_version
     source = prompt_source_path || return
-
     if version(source).to_i <= Sketchup.version.to_i
       Sketchup.open_file(source)
       return
     end
-
     target = prompt_target_path(source) || return
-
-    Sketchup.status_text = "Converting model to supported format..."
-    `"#{PLUGIN_DIR}/bin/ConvertVersion" "#{source}" "#{target}" #{SU_VERSION}`
-    Sketchup.open_file(target)
+    convert_and_open(source, target)
 
     nil
   end
