@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 #
 #    Author: Julia Christina Eneroth
-# Copyright: Copyright (c) 2018
+# Copyright: Copyright (c) 2019
 #   License: MIT
 #
 #-------------------------------------------------------------------------------
@@ -27,8 +27,8 @@ module OpenNewerVersion
   EXTENSION.creator     = "Julia Christina Eneroth"
   EXTENSION.description =
     "Convert and open models made in newer versions of SketchUp."
-  EXTENSION.version     = "1.0.1"
-  EXTENSION.copyright   = "2018, #{EXTENSION.creator}"
+  EXTENSION.version     = "1.0.2"
+  EXTENSION.copyright   = "2019, #{EXTENSION.creator}"
   Sketchup.register_extension(EXTENSION, true)
 
 end
