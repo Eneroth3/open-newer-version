@@ -42,6 +42,5 @@ int main(int argc, char* argv[]) {
 
   SUModelRelease(&model);
   SUTerminate();
-  // TODO: Should version, versions, source and target be released too?
   return 0;
 }
