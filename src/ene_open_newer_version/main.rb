@@ -130,7 +130,7 @@ module OpenNewerVersion
   #
   # @param menu [UI::Menu]
   # @param name [String]
-  # @param position [Fixnum, nil]
+  # @param position [Integer, nil]
   #
   # @example
   #   # Add Menu Item Right Below Entity Info
@@ -144,7 +144,7 @@ module OpenNewerVersion
   #     end
   #   end
   #
-  # @return [Fixnum] identifier of menu item.
+  # @return [Integer] identifier of menu item.
   def self.add_menu_item(menu, name, position = nil, &block)
     # Sketchup.platform added in SU2014.
     if position && Sketchup.platform == :platform_win && Sketchup.version.to_i >= 16
