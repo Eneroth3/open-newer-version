@@ -28,7 +28,8 @@ int main(int argc, char* argv[]) {
     {15,SUModelVersion_SU2015},
     {16,SUModelVersion_SU2016},
     {17,SUModelVersion_SU2017},
-    {18,SUModelVersion_SU2018}
+    {18,SUModelVersion_SU2018},
+	{19,SUModelVersion_SU2019 }
   };
   enum SUModelVersion version = versions.at(version_name);
 

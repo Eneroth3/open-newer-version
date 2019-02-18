@@ -68,7 +68,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>D:/Sketchup Plugins/SDK_Win_x64_18-0-18664/headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Sketchup Plugins\SDK_WIN_x64_2019-0-753_0\headers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
