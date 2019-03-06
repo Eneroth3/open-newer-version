@@ -28,4 +28,5 @@ line_ to refer to where the Sketchup SDK binaries are on your machine.
 
 After building a new ConvertVersion.exe, copy it into src/bin/ to make it a part
 of the Ruby extension (yeah, this could be scripted but let's do one thing at a
-time).
+time). Also copy the most recent SketchUpAPI.dll and
+SketchUpCommonPreferences.dll to this directory.
