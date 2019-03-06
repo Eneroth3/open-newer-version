@@ -3,8 +3,12 @@ require "tempfile"
 module Eneroth
 module OpenNewerVersion
 
-  # Mayor version of the running SketchUp.
+  # Major version of the running SketchUp.
   SU_VERSION = Sketchup.version.to_i
+
+  # Newest major SketchUp version file format currently supported.
+  # Update this along with recompiling binary with the new SDK.
+  HIGHEST_SUPPORTED_SU_VERSION = 19
 
   # Get SketchUp version string of a saved file.
   #
@@ -111,8 +115,16 @@ module OpenNewerVersion
   # @return [Void]
   def self.open_newer_version
     source = prompt_source_path || return
-    if version(source).to_i <= Sketchup.version.to_i
+    version = version(source).to_i
+    if version <= SU_VERSION
       Sketchup.open_file(source)
+      return
+    end
+    if version > HIGHEST_SUPPORTED_SU_VERSION
+      msg =
+        "This version of #{EXTENSION.name} does not support "\
+        "SketchUp 20#{version} files."
+      UI.messagebox(msg)
       return
     end
     target = prompt_target_path(source) || return

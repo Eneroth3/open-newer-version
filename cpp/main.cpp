@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
     {17,SUModelVersion_SU2017},
     {18,SUModelVersion_SU2018},
 	{19,SUModelVersion_SU2019 }
+	// When adding new version here, also update HIGHEST_SUPPORTED_SU_VERSION in main.rb.
   };
   enum SUModelVersion version = versions.at(version_name);
 
