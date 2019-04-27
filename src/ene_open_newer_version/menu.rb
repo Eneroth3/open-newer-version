@@ -35,12 +35,29 @@ module Eneroth
       end
     end
 
+    # Get index to place Open Newer Version at entry at.
+    #
+    # @return [Integer]
+    def self.menu_index
+      # Pre 2019:
+      #   New
+      #   Open...
+      #   <-- Here
+      #
+      # 2019:
+      #   New
+      #   New From Template...
+      #   Open...
+      #   <-- Here
+      Sketchup.version.to_i < 19 ?  2 : 3
+    end
+
     # Menu
     unless @loaded
       @loaded = true
 
       menu = UI.menu("File")
-      add_menu_item(menu, "Open Newer Version...", 2) do
+      add_menu_item(menu, "Open Newer Version...", menu_index) do
         OpenNewer.open_newer_version
       end
     end
