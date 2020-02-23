@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
     {16,SUModelVersion_SU2016},
     {17,SUModelVersion_SU2017},
     {18,SUModelVersion_SU2018},
-	  {19,SUModelVersion_SU2019},
-	  {20,SUModelVersion_SU2019} // No SUModelVersion_SU2020 available, but this seems to work to o.0 .
+    {19,SUModelVersion_SU2019},
+    {20,SUModelVersion_SU2020}
 	// When adding new version here, also update HIGHEST_SUPPORTED_SU_VERSION in open_newer.rb.
   };
   enum SUModelVersion version = versions.at(version_name);
