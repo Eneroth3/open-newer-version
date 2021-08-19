@@ -8,7 +8,7 @@ module Eneroth
 
       # Newest major SketchUp version file format currently supported.
       # Update this along with recompiling binary with the new SDK.
-      HIGHEST_SUPPORTED_SU_VERSION = 20
+      HIGHEST_SUPPORTED_SU_VERSION = 21
 
       # Get SketchUp version string of a saved file.
       #
