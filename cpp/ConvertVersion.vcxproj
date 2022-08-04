@@ -74,7 +74,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\cenerot\Documents\Source\SketchUp Public SDKs\SDK_WIN_x64_2021-1-279\headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\cenerot\Documents\Source\SketchUp Public SDKs\SDK_WIN_x64_2022-0-354\headers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

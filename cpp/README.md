@@ -6,7 +6,7 @@ it and just focus on the SketchUp Ruby extension.
 
 # Set Up Guide
 
-1. Open the Visual Studio solution.
+1. Open the Visual Studio solution (ConvertVersion.sln).
 
 2. Open properties of the ConvertVersion project (right click > Properties).
 
