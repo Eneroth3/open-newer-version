@@ -14,6 +14,10 @@ int main(int argc, char* argv[]) {
   const char* target = argv[2];
   int version_name = std::stoi(argv[3]);
 
+  // With version 2021 SketchUp changed to a "versionless" file format, meaning later application versions uses the same file version.
+  if (version_name > 21)
+      version_name = 21;
+
   // REVIEW: Must be a way to simply append number to "SUModelVersion_SU" string
   // and get enum from its string name.
   const std::unordered_map<int, SUModelVersion> versions = {
@@ -32,14 +36,15 @@ int main(int argc, char* argv[]) {
     {19,SUModelVersion_SU2019},
     {20,SUModelVersion_SU2020},
     {21,SUModelVersion_SU2021}
-	// When adding new version here, also update HIGHEST_SUPPORTED_SU_VERSION in open_newer.rb.
+    // 2021 is the first "versionless" file version, also used by later SU versions.
   };
   enum SUModelVersion version = versions.at(version_name);
 
   SUInitialize();
 
   SUModelRef model = SU_INVALID;
-  SUResult res = SUModelCreateFromFile(&model, source);
+  SUModelLoadStatus status;
+  SUResult res = SUModelCreateFromFileWithStatus(&model, source, &status);
   if (res != SU_ERROR_NONE) return 1;
   SUModelSaveToFileWithVersion(model, target, version);
 

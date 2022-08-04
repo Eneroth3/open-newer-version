@@ -6,10 +6,6 @@ module Eneroth
       # Major version of the running SketchUp.
       SU_VERSION = Sketchup.version.to_i
 
-      # Newest major SketchUp version file format currently supported.
-      # Update this along with recompiling binary with the new SDK.
-      HIGHEST_SUPPORTED_SU_VERSION = 21
-
       # Get SketchUp version string of a saved file.
       #
       # @param path [String]
@@ -118,13 +114,6 @@ module Eneroth
         version = version(source).to_i
         if version <= SU_VERSION
           Sketchup.open_file(source)
-          return
-        end
-        if version > HIGHEST_SUPPORTED_SU_VERSION
-          msg =
-            "This version of #{EXTENSION.name} does not support "\
-            "SketchUp 20#{version} files."
-          UI.messagebox(msg)
           return
         end
         target = prompt_target_path(source) || return
