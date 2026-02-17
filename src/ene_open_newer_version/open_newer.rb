@@ -39,7 +39,19 @@ module Eneroth
         directory = File.dirname(source)
         filename = "#{File.basename(source, '.skp')} (SU 20#{SU_VERSION}).skp"
 
-        UI.savepanel(title, directory, filename)
+        # Asks if overwriting, but does not force file version
+        path = UI.savepanel(title, directory, filename)
+        
+        unless path.end_with?(".skp")
+          path += ".skp"
+          # Have to ask for overwriting again if we change the file extension.
+          if File.exist?(path)
+            msg = "#{path} already exists.\nDo you want to replace it?"
+            return if UI.messagebox(msg, MB_YESNO) == IDNO
+          end
+        end
+        
+        path
       end
 
       # Run system call without flashing command line window on Windows.
@@ -85,15 +97,15 @@ module Eneroth
         nil
       end
 
-      # Convert an external model to the current SU version and open it.
+      # Convert an external model to the current SU version.
       #
       # @param source [String]
       # @param target [String]
       #
+      # @yield when the file is converted.
+      #
       # @return [Void]
-      def self.convert_and_open(source, target)
-        Sketchup.status_text = "Converting model to supported format..."
-
+      def self.convert(source, target)
         # Since the hack for running the system command without a flashing window
         # makes the call asynchronous, we need to wait to open the converted model
         # until its file exists. To check for file creation, we must first make sure
@@ -101,7 +113,7 @@ module Eneroth
         File.delete(target) if File.exist?(target)
 
         system_call(%("#{PLUGIN_DIR}/bin/ConvertVersion" "#{source}" "#{target}" #{SU_VERSION}))
-        on_exist(target, false) { Sketchup.open_file(target) }
+        on_exist(target, false) { yield }
 
         nil
       end
@@ -117,7 +129,25 @@ module Eneroth
           return
         end
         target = prompt_target_path(source) || return
-        convert_and_open(source, target)
+        Sketchup.status_text = "Converting model to supported format..."
+        convert(source, target) { Sketchup.open_file(target) }
+
+        nil
+      end
+      
+      # Ask for path to import, convert if needed and import.
+      #
+      # @return [Void]
+      def self.import_newer_version
+        source = prompt_source_path || return
+        version = version(source).to_i
+        if version <= SU_VERSION
+          Sketchup.active_model.import(source)
+          return
+        end
+        target = prompt_target_path(source) || return
+        Sketchup.status_text = "Converting model to supported format..."
+        convert(source, target) { Sketchup.active_model.import(target) }
 
         nil
       end
